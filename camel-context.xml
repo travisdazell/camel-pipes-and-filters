@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+  <bean id="messageReceiver" class="org.apache.camel.example.console.MessageReceiver">
+	</bean>
+	
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+	  <property name="connectionFactory">
+	    <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+	      <property name="brokerURL" value="tcp://localhost:61616"/>
+	    </bean>
+	  </property>
+	</bean>
+
+  <camelContext xmlns="http://camel.apache.org/schema/spring">
+  
+  	<!-- pipes and filters example -->
+    <route>
+	  <!-- get message from JMS FOO.BAR queue -->
+      <from uri="activemq:queue:FOO.BAR" />
+
+      <!-- use the simple language to transform the input to upper case -->
+      <transform>
+        <simple>${body.toUpperCase()}</simple>
+      </transform>
+      
+      <!-- route the input to the messageReceiver bean, which will modify the message slightly -->
+      <to uri="bean:messageReceiver?method=processMessage"/>
+      
+      <!-- route the output from the messageReceiver bean to the output console -->
+      <to uri="stream:out"/>
+    </route>
+
+  </camelContext>
+
+</beans>
