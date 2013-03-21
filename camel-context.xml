@@ -6,7 +6,7 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-  <bean id="messageReceiver" class="org.apache.camel.example.console.MessageReceiver">
+  <bean id="messageReceiver" class="net.travisdazell.camel.examples.pipesandfilters.MessageReceiver">
 	</bean>
 	
 	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
